@@ -18,4 +18,12 @@ public class MainController {
         // (3) str variable home -> name of the template home.html
         return "home";
     }
+    @GetMapping("/about")
+    public String about(Model model) {
+        model.addAttribute("title", "About Page");
+        return "about";
+    }
+
+
+
 }

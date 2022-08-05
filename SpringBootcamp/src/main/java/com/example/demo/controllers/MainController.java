@@ -18,6 +18,7 @@ public class MainController {
         // (3) str variable home -> name of the template home.html
         return "home";
     }
+    // Get means that request method for rendered page is: GET
     @GetMapping("/about")
     public String about(Model model) {
         model.addAttribute("title", "About Page");

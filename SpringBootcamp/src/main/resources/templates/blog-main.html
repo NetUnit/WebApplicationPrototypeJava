@@ -12,10 +12,16 @@
 <body>
 <!-- place for header -->
 <header th:insert="blocks/navbar-header :: header"></header>
+<header th:insert="blocks/blog-add-snippet :: header"></header>
 
 <!-- place for content -->
 <div class="container mt-5">
     <h1>Website Blog</h1>
+        <div th:each="el : ${posts}" class="alert alert-info mt-2">
+            <h3 th:text="${el.id}"/>
+            <h4><tr th:fragment="${el.title}"></h4>
+            <a th:href="'/blog/' + ${el.id}">Detailed</a>
+        </div>
 </div>
 
 <!-- place for footer -->

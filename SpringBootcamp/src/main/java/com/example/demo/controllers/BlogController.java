@@ -126,10 +126,6 @@ public class BlogController {
 
     // update functionality
     // @GetMapping decorator aims to use POST/GET methods along with each other
-    @GetMapping("/blog/{id}/delete")
-    public String blogDelete(Model model) {
-        return "blog-update";
-    }
     @GetMapping("/blog/{id}/update")
     public String blogUpdateForm(
             Model model,
@@ -170,8 +166,25 @@ public class BlogController {
                 upd_post, title, anons, full_text)
          );
         postRepository.save(upd_post);
+        return "redirect:/blog/{id}";
+    }
+
+    @GetMapping("/blog/{id}/delete")
+    public String blogDelete(Model model, @PathVariable(value = "id") Integer id) {
+        Optional<Post> post = postRepository.findById(id);
+        ArrayList<Post> post_del_attrs = new ArrayList<>();
+        post.ifPresent(post_del_attrs::add);
+        model.addAttribute("post_del", post_del_attrs);
+        return "blog-delete";
+    }
+
+    @PostMapping("/blog/{id}/delete")
+    public String blogPostDelete(Model model, @PathVariable(value = "id") Integer id) {
+        Post post = postRepository.findById(id).orElseThrow();
+        postRepository.delete(post);
         return "redirect:/blog";
     }
+
     private String httpServletRequestToString(HttpServletRequest request) {
         StringBuilder sb = new StringBuilder();
 

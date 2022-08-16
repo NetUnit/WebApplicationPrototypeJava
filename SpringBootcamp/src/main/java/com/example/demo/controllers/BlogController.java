@@ -16,10 +16,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,29 +40,21 @@ public class BlogController {
          // System.out.println(posts.getClass().getSimpleName());
 
          // instantiate new object instance
-         Post object = new Post();
+        Post object = postRepository.findById(6).orElseThrow();
+        // get * object fields as the field array
+        Field[] fields = object.getClass().getDeclaredFields();
 
-         // Load all fields in the class (private included)
-         Field[] attributes =  object.getClass().getDeclaredFields();
+        // alternatively getting * object fields
+        // List<Field> fields = Arrays.asList(object.getClass().getDeclaredFields());
 
-         for (Field field : attributes) {
+         for (Field field : fields ) {
              // Dynamically read Attribute Name
-             // System.out.println("ATTRIBUTE NAME: " + field.getName());
-
-             // gets object field-value
+             System.out.println("ATTRIBUTE NAME: " + field.getName());
+             // gets object field-value !! setAccessible is compulsory for private fields;
              field.setAccessible(true);
-             Object objectValue = field.get(object);
-             // System.out.println("ATTRIBUTE Value: " + objectValue);
+             System.out.println("ATTRIBUTE Value: " + field.get(object));
          }
 
-          // single object
-          // Object obj = postRepository.findById(1);
-          // Field[] obj_fields = obj.getClass().getDeclaredFields();
-
-          // for (Field ff: obj_fields) {
-          //     ff.setAccessible(true);
-          //    System.out.println("ATTRIBUTE Value: " + ff.get(obj).toString());
-          // }
          return "blog-main";
     }
     @GetMapping("/blog/add")
@@ -179,11 +168,11 @@ public class BlogController {
     }
 
     @PostMapping("/blog/{id}/delete")
-    public String blogPostDelete(Model model, @PathVariable(value = "id") Integer id) {
-        Post post = postRepository.findById(id).orElseThrow();
-        postRepository.delete(post);
-        return "redirect:/blog";
-    }
+        public String blogPostDelete(Model model, @PathVariable(value = "id") Integer id) {
+            Post post = postRepository.findById(id).orElseThrow();
+            postRepository.delete(post);
+            return "redirect:/blog";
+        }
 
     private String httpServletRequestToString(HttpServletRequest request) {
         StringBuilder sb = new StringBuilder();

@@ -30,7 +30,6 @@ public class Post {
         return views;
     }
 
-
     public void setId(Integer Id) {this.id = id;}
     public void setTitle(String title) {this.title = title;}
     public void setAnons(String anons) {this.anons = anons;}
